@@ -1,0 +1,168 @@
+openapi: 3.0.3
+info:
+  title: GitHub Profile API
+  version: 0.1.0
+  description: Aggregates public GitHub user and repository data into the Branch coding exercise response shape.
+paths:
+  /users/{username}:
+    get:
+      summary: Retrieve a GitHub profile summary
+      operationId: getGitHubProfile
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: GitHub username to retrieve.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 39
+            pattern: '^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$'
+        - name: X-GitHub-Token
+          in: header
+          required: false
+          description: Optional GitHub token forwarded only to GitHub as a Bearer token for this lookup.
+          schema:
+            type: string
+            format: password
+      responses:
+        '200':
+          description: GitHub profile summary retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GitHubProfile'
+              examples:
+                octocat:
+                  summary: Octocat profile response
+                  value:
+                    user_name: octocat
+                    display_name: The Octocat
+                    avatar: https://avatars.githubusercontent.com/u/583231?v=4
+                    geo_location: San Francisco
+                    email: null
+                    url: https://api.github.com/users/octocat
+                    created_at: Tue, 25 Jan 2011 18:44:36 GMT
+                    repos:
+                      - name: boysenberry-repo-1
+                        url: https://api.github.com/repos/octocat/boysenberry-repo-1
+        '400':
+          description: Username is blank or malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: GitHub user was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: GitHub rate limit prevents lookup completion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: GitHub returned invalid or unavailable data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '504':
+          description: GitHub lookup timed out.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Unexpected internal error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    GitHubProfile:
+      type: object
+      required:
+        - user_name
+        - display_name
+        - avatar
+        - geo_location
+        - email
+        - url
+        - created_at
+        - repos
+      properties:
+        user_name:
+          type: string
+          example: octocat
+        display_name:
+          type: string
+          nullable: true
+          example: The Octocat
+        avatar:
+          type: string
+          format: uri
+          nullable: true
+          example: https://avatars.githubusercontent.com/u/583231?v=4
+        geo_location:
+          type: string
+          nullable: true
+          example: San Francisco
+        email:
+          type: string
+          format: email
+          nullable: true
+          example: null
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat
+        created_at:
+          type: string
+          description: HTTP-date formatted timestamp.
+          example: Tue, 25 Jan 2011 18:44:36 GMT
+        repos:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepositorySummary'
+    RepositorySummary:
+      type: object
+      required:
+        - name
+        - url
+      properties:
+        name:
+          type: string
+          example: boysenberry-repo-1
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/boysenberry-repo-1
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+        - status
+      properties:
+        code:
+          type: string
+          enum:
+            - INVALID_USERNAME
+            - PROFILE_NOT_FOUND
+            - UPSTREAM_RATE_LIMITED
+            - UPSTREAM_TIMEOUT
+            - UPSTREAM_UNAVAILABLE
+            - NOT_FOUND
+            - INTERNAL_ERROR
+        message:
+          type: string
+        status:
+          type: integer
+        requestId:
+          type: string
+          nullable: true

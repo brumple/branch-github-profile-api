@@ -1,0 +1,68 @@
+Coding Exercise
+The purpose of this exercise is to get an understanding of how you code and provide you with a
+chance to experience the type of work you will be doing at Branch. We do not expect this
+assessment to take any longer than 3-5 hours; if it takes much longer please stop and send what
+you have completed.
+
+Platform Engineer
+A recently signed customer wants to integrate a subset of GitHub’s data into their application. We
+have discussed their needs and they want an endpoint they can provide a username that will then
+return the data in JSON format as specified below (that also serves as an example):
+{
+user_name: "octocat",
+display_name: "The Octocat",
+avatar: "https://avatars.githubusercontent.com/u/583231?v=4",
+geo_location: "San Francisco",
+email: null,
+url: "https://api.github.com/users/octocat",
+created_at: "Tue, 25 Jan 2011 18:44:36 GMT",
+repos: [{
+name: "boysenberry-repo-1",
+url: "https://api.github.com/repos/octocat/boysenberry-repo-1
+}, ...
+]
+
+}
+Getting Started: https://docs.github.com/en/rest/guides/getting-started-with-the-rest-api
+Data Sources: https://api.github.com/users/octocat | https://api.github.com/users/octocat/repos
+
+The example response above is the result of calling the API with the username “octocat”. The data is
+merged after calling the two APIs noted. Be sure to take note of the difference(s) in parameter
+names as well as any potential formatting differences between GitHub’s APIs and the expected
+response.
+No token or signup is necessary to use these Github APIs; however, you can be rate limited. Perhaps
+implementing a caching mechanism might help? Of course, you could get an access token that
+could be set at runtime (we do not expect this).
+
+In Summary
+● Stand up a server
+● Have an endpoint that takes a username
+● Fetch or retrieve the data
+● Return the JSON defined above
+● Have tests to prove your implementation
+Push your finalized code to a public repo (GitHub, BitBucket, GitLab). Provide a README explaining
+your decisions, architecture, and how to install/run and utilize your service.
+We look forward to seeing your code!
+
+FAQ
+What language/tools do I use? Can I use a framework or library?
+Our core services are written in Java/Spring Boot; therefore, we ask you to complete the
+assignment utilizing those two languages. Feel free to use any other libraries that you wish.
+
+What am I being evaluated on exactly?
+We want to see production-ready code. Primary criteria are as follows:
+● Organization: Is the code well organized where it can be easily extended? Is it properly
+broken apart into logical and maintainable pieces?
+● Readability: Can the code be easily read and followed by a new developer. Better yet, would
+you be able to even understand it if you come back to it months later?
+● Libraries/Frameworks: Are these good choices? Is the reasoning sound?
+● Documentation: Can we run and use the code based on the README? Is the code itself well
+documented in some way?
+● Depth of Knowledge: Are the right data structures being used? Are the strengths of the
+language chosen being utilized? Does the API follow industry standards?
+● Stability/Security: Can the code handle bad input? Is the code programmed defensively?
+Can I have someone help me?
+Please no. We expect the code to reflect your choices and knowledge. That said, feel free to use
+online resources as needed for reference.
+
+
