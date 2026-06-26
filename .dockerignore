@@ -1,0 +1,7 @@
+.git
+.gitignore
+.agents
+.specify
+target
+*.log
+.DS_Store
